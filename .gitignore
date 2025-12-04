@@ -31,3 +31,221 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+
+Package declaration
+package com.ajay.day1rest.controller;
+
+
+📌 What this means:
+
+Every Java class must belong to a package.
+
+Packages help organize your project.
+
+Here, you created a controller package which stores all REST controllers.
+
+📌 Why important in Spring Boot:
+Spring Boot scans packages automatically (component scanning).
+So it detects this controller and registers it as a REST endpoint.
+
+2️⃣ Imports
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import java.util.HashMap;
+import java.util.Map;
+
+Breakdown:
+✔ @RestController
+
+Comes from Spring Web package.
+Tells Spring:
+
+"This class contains REST API endpoints."
+
+✔ @GetMapping
+
+Maps an HTTP GET request to a method.
+
+Example:
+@GetMapping("/hello") → method runs when client hits /hello.
+
+✔ HashMap & Map
+
+We use these to create JSON objects.
+
+Spring automatically converts Map → JSON using Jackson library.
+
+3️⃣ Controller Class Declaration
+@RestController
+public class HelloController {
+
+Meaning:
+✔ @RestController
+
+Combines @Controller + @ResponseBody
+
+Means: return values of methods will be converted to JSON
+
+No need to write JSON manually
+
+No need for JSP/HTML views
+
+✔ public class HelloController
+
+A simple class containing your REST methods.
+
+4️⃣ The /hello Endpoint
+@GetMapping("/hello")
+public Map<String, String> hello() {
+    Map<String, String> response = new HashMap<>();
+    response.put("message", "Hello, Ajay!");
+    return response;
+}
+
+Explanation:
+✔ @GetMapping("/hello")
+
+This method will run when the user sends:
+
+GET http://localhost:8080/hello
+
+✔ Method return type: Map<String, String>
+
+We return a Map so Spring/Jackson can convert it to JSON like:
+
+{
+  "message": "Hello, Ajay!"
+}
+
+✔ Inside the method:
+Map<String, String> response = new HashMap<>();
+
+
+Creates a new HashMap.
+
+response.put("message", "Hello, Ajay!");
+
+
+Adds a key-value pair to JSON.
+
+return response;
+
+
+Spring auto-converts map → JSON → sends it to browser/Postman.
+
+5️⃣ The /ping Endpoint
+@GetMapping("/ping")
+public String ping() {
+    return "pong";
+}
+
+Explanation:
+
+/ping is often used to check if server is running.
+
+Returns plain text "pong".
+
+Spring automatically wraps it inside an HTTP response.
+
+This is useful for:
+
+✔ health checks
+✔ load balancer checks
+✔ checking if API is reachable
+
+6️⃣ The /time Endpoint
+@GetMapping("/time")
+public Map<String, String> getTime() {
+    Map<String, String> res = new HashMap<>();
+    res.put("time", java.time.LocalDateTime.now().toString());
+    return res;
+}
+
+Explanation:
+✔ LocalDateTime.now()
+
+Gets the current server time.
+
+✔ .toString()
+
+Converts it into ISO format like:
+
+2025-02-01T14:20:55.123
+
+✔ Returning as Map
+
+So JSON output becomes:
+
+{
+  "time": "2025-02-01T14:20:55.123"
+}
+
+📡 How Spring Boot Converts Map to JSON (Important)
+
+Spring Boot includes:
+
+✔ spring-boot-starter-web
+✔ spring-boot-starter-json
+✔ Jackson library
+
+When you return:
+
+Map
+
+POJO (class)
+
+List
+
+Any object
+
+Spring Boot auto converts it to JSON (serialization).
+No need to do JSON manually.
+
+🚀 How Spring Boot Handles the Endpoint Internally
+
+User hits URL → GET /hello
+
+Spring Boot finds a method mapped to /hello
+
+Calls your hello() method
+
+Returns a Java Map
+
+Jackson converts Map → JSON
+
+Tomcat sends HTTP response back to browser
+
+🎯 Why Using Map is Good for Beginners?
+
+No need to create DTO classes on day1
+
+Easy to return simple JSON
+
+Good for learning serialization
+
+Later we will use:
+
+✔ DTOs
+✔ Entities
+✔ Response objects
+
+👨‍🏫 Why Controller Layer Exists?
+
+Controller is the layer responsible for:
+
+handling HTTP requests
+
+taking input
+
+returning output
+
+interacting with services (later)
+
+In Spring Boot layers:
+
+Controller → Service → Repository → Database
+
+
+Day 1 uses only Controller layer to keep things simple.
